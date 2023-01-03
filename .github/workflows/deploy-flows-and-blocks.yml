@@ -112,8 +112,9 @@ jobs:
         uses: actions/checkout@v3
       - name: Generate matrix output for flows
         run: echo "matrix=$(ls flows/*.py | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
   deploy-flows-images:
-    needs: [builds-and-deploys-flows-image, deploy-blocks, list-flows]
+    needs: [builds-and-deploys-flows-image, deploy-block, list-flows]
     runs-on: ubuntu-latest
     strategy:
       matrix:
