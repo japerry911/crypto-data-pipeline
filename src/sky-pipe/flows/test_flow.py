@@ -1,7 +1,7 @@
 from prefect import flow
 
 
-@flow(log_prints=True)
+@flow(name="Test_Flow", log_prints=True)
 def test_flow():
     print("Hello from Prefect, woohoo!")
 
