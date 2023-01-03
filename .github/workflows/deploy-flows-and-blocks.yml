@@ -62,7 +62,7 @@ jobs:
     strategy:
       matrix:
         cpu: [1]
-        memory: [128, 256, 1024, 2048, 4096]
+        memory: [128, 256, 512, 1024, 2048, 4096]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -94,6 +94,7 @@ jobs:
             credentials=GcpCredentials.load("gcp-credentials"),
             cpu=${{ matrix.cpu }},
             memory=${{ matrix.memory }},
+            memory_unit: "Mi",
             timeout=3600,
           )
           block.save("testaroo", overwrite=True)
