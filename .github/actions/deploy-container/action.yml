@@ -1,0 +1,69 @@
+name: Prefect Cloud execution layer on Google Cloud Run
+branding:
+  icon: cloud
+  color: blue
+description: 'Package your dependencies into a Docker image and deploy Prefect Cloud execution layer to Google Compute Engine'
+inputs:
+  prefect_api_key:
+    description: 'Prefect Cloud API key'
+    required: true
+  prefect_api_url:
+    description: 'Prefect Cloud API URL'
+    required: true
+  gcp_credentials_json:
+    description: 'Content of the Service Account JSON key file'
+    required: true
+  region:
+    description: 'GCP region'
+    required: true
+  artifact_repository:
+    description: 'Artifact Registry Repository Name'
+    required: true
+  image_name:
+    description: 'Artifact Registry Image Name'
+    required: true
+  zone:
+    description: 'GCP region with the zone'
+    required: true
+  machine_type:
+    description: 'GCP Compute Engine instance type'
+    required: true
+  machine_name:
+    description: 'GCP Compute Engine instance name'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        credentials_json: "${{ inputs.gcp_credentials_json }}"
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+
+    - id: image
+      uses: ./.github/actions/container-image
+      with:
+        prefect_api_key: ${{ inputs.prefect_api_key }}
+        prefect_api_url: ${{ inputs.prefect_api_url }}
+        gcp_credentials_json: ${{ inputs.gcp_credentials_json }}
+        region: ${{ inputs.region }}
+        artifact_repository: ${{ inputs.artifact_repository }}
+        image_name: ${{ inputs.image_name }}
+
+    - id: terminate-if-exists
+      run: gcloud compute instances delete "${{ inputs.machine_name }}" --zone "${{ inputs.zone }}" --quiet --verbosity none
+      continue-on-error: true
+      shell: bash
+
+    - id: deploy-vm
+      shell: bash
+      run: |
+        export EMAIL=$(cat $GOOGLE_GHA_CREDS_PATH | jq -r '.["client_email"]')
+        gcloud compute instances create-with-container "${{ inputs.machine_name }}" \
+          --zone "${{ inputs.zone }}" \
+          --machine-type "${{ inputs.machine_type }}" \
+          --service-account $EMAIL \
+          --scopes "cloud-platform" \
+          --container-image "${{ env.IMAGE_URI }}"

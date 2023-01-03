@@ -43,4 +43,5 @@ jobs:
           gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
           zone: ${{ github.event.inputs.zone }}
           machine_type: ${{ github.event.inputs.machine_type }} 
-          machine_name: ${{ github.event.inputs.machine_name }} 
+          machine_name: ${{ github.event.inputs.machine_name }}
+          image_name: prefect-agent
