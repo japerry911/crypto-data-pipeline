@@ -114,7 +114,8 @@ jobs:
         shell: bash
 
   deploy-flows-images:
-    needs: [builds-and-deploys-flows-image, deploy-block, list-flows]
+#    needs: [builds-and-deploys-flows-image, deploy-block, list-flows]
+    needs: [list-flows]
     runs-on: ubuntu-latest
     strategy:
       matrix:
