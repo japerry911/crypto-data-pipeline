@@ -94,7 +94,7 @@ jobs:
             credentials=GcpCredentials.load("gcp-credentials"),
             cpu=${{ matrix.cpu }},
             memory=${{ matrix.memory }},
-            memory_unit: "Mi",
+            memory_unit="Mi",
             timeout=3600,
           )
           block.save("testaroo", overwrite=True)
