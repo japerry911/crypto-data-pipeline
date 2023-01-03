@@ -22,7 +22,7 @@ inputs:
     required: true
   dockerfile_path:
     description: 'Path and filename of the Dockerfile'
-    required: false
+    required: true
     default: Dockerfile
 
 runs:

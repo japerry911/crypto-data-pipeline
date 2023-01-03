@@ -1,4 +1,5 @@
 name: Prefect Agent Deployment
+
 on:
   workflow_dispatch:
     inputs:
@@ -48,8 +49,8 @@ jobs:
       - name: Generate requirements.txt
         run: poetry export -f requirements.txt -o requirements.txt
       - name: Build and deploy actual container
-        id: deploy-container
-        uses: ./.github/actions/deploy-container
+        id: deploy-container-to-compute-engine
+        uses: ./.github/actions/deploy-container-to-compute-engine
         with:
           prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
           prefect_api_url: ${{ secrets.PREFECT_API_URL }}
@@ -60,3 +61,4 @@ jobs:
           machine_type: ${{ github.event.inputs.machine_type }}
           machine_name: ${{ github.event.inputs.machine_name }}
           image_name: ${{ github.event.inputs.image_name }}
+          dockerfile_path: Dockerfile_Agent

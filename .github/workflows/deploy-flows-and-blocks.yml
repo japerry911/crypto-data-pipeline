@@ -1,0 +1,88 @@
+name: Prefect Deployments for deployments, flows, and blocks
+
+on:
+  workflow_dispatch:
+    inputs:
+      prefect-queue:
+        description: Prefect working queue that the flows are on
+        required: true
+        default: sky-pipe
+        type: string
+      artifact_repository:
+        description: Artifact Registry Repository
+        required: true
+        default: 'prefect-flows'
+        type: string
+      image_name:
+        description: Image name in Artifact Registry Repository
+        required: true
+        default: 'flows'
+        type: string
+      region:
+        description: GCP region
+        required: true
+        default: 'us-central1'
+        type: string
+
+jobs:
+  builds-and-deploys-flows-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Generate requirements.txt
+        run: poetry export -f requirements.txt -o requirements.txt
+      - name: Build and push image to Artifact Registry
+        id: image
+        uses: ./.github/actions/container-image
+        with:
+          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
+          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
+          gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          region: ${{ github.event.inputs.region }}
+          artifact_repository: ${{ github.event.inputs.artifact_repository }}
+          image_name: ${{ github.event.inputs.image_name }}
+          dockerfile_path: Dockerfile_Flows
+
+#  list-flows:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      matrix: ${{ steps.set-matrix.outputs.matrix }}
+#    steps:
+#      - name: Checkout
+#        id: set-matrix
+#        uses: actions/checkout@v3
+#        run: echo "matrix=$(ls flows/*.py | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+#  deploy-flows-images:
+#    needs: list-flows
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        flows: ${{ fromJson(needs.list-flows.outputs.matrix) }}
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: Creates entrypoint output value
+#        id: flow
+#        run: |
+#          export FLOW_NAME=$(basename ${{ matrix.flows }} .py)
+#          echo "entrypoint=${{ matrix.flows }}:$FLOW_NAME" >> $GITHUB_OUTPUT
+#      - name: Deploy flows to Cloud Run
+#        id: deploy
+#        uses: ./.github/actions/deploy-flows
+#        with:
+#          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
+#          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
+#          flow_entrypoint: ${{ steps.flow.outputs.entrypoint }}
+#          deployment: "${{ matrix.flows }}-main-flow"
+#          queue: ${{ github.event.inputs.prefect-queue }}
+#          storage_block: "github/default"
+#          infrastructure_block: "cloud-run-job/default"
+#          python_version: "3.10"
+#          install_command: "pip install -r requirement.txt"

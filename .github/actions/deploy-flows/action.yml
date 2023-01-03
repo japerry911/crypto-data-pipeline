@@ -1,0 +1,56 @@
+name: 'Deploy flows'
+description: 'Deploy flows to Prefect Cloud and Google Cloud Run'
+
+inputs:
+  prefect_api_key:
+    description: 'Prefect Cloud API key'
+    required: true
+  prefect_api_url:
+    description: 'Prefect Cloud API URL'
+    required: true
+  flow_entrypoint:
+    description: 'Prefect flow entrypoint e.g. myflow.py:flow_function'
+    required: true
+  deployment:
+    description: 'Prefect deployment name - could reference environment or branch name e.g. dev or prod'
+    required: false
+    default: default
+  queue:
+    description: 'Prefect queue name'
+    required: true
+  storage_block:
+    description: 'Name of the storage block'
+    required: false
+    default: "github/default"
+  infrastructure_block:
+    description: 'Name of the infrastructure block'
+    required: false
+    default: "cloud-run-job/default"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        cache: 'pip'
+
+    - name: Install requirements.txt (Prefect included)
+      id: install-requirements
+      run: |
+        pip install -r requirements.txt
+      shell: bash
+
+    - name: Configure Prefect credentials
+      id: login-prefect
+      run: |
+        prefect config set PREFECT_API_KEY=${{ inputs.prefect_api_key }}
+        prefect config set PREFECT_API_URL=${{ inputs.prefect_api_url }}
+      shell: bash
+
+    - name: Run Prefect Deployment build
+      run: |
+        prefect deployment build ${{ inputs.flow_entrypoint }} -n ${{ inputs.deployment }} -q ${{ inputs.queue }} \
+        -sb "${{ inputs.storage_block }}" -ib "${{ inputs.infrastructure_block }}" --skip-upload -a -v $GITHUB_SHA
+      shell: bash

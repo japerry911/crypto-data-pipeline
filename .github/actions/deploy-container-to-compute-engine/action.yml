@@ -1,4 +1,4 @@
-name: Prefect Cloud execution layer on Google Cloud Run
+name: Prefect Cloud execution layer on Google Cloud Compute Engine
 description: 'Package your dependencies into a Docker image and deploy Prefect Cloud execution layer to Google Compute Engine'
 
 inputs:
@@ -29,6 +29,10 @@ inputs:
   machine_name:
     description: 'GCP Compute Engine instance name'
     required: true
+  dockerfile_path:
+    description: 'Path and filename of the Dockerfile'
+    required: true
+    default: Dockerfile
 
 runs:
   using: "composite"
@@ -37,11 +41,10 @@ runs:
       uses: google-github-actions/auth@v1
       with:
         credentials_json: "${{ inputs.gcp_credentials_json }}"
-
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
-
-    - id: image
+    - name: Push image to Artifact Registry
+      id: image
       uses: ./.github/actions/container-image
       with:
         prefect_api_key: ${{ inputs.prefect_api_key }}
@@ -50,13 +53,14 @@ runs:
         region: ${{ inputs.region }}
         artifact_repository: ${{ inputs.artifact_repository }}
         image_name: ${{ inputs.image_name }}
-
-    - id: terminate-if-exists
+        dockerfile_path: ${{ inputs.dockerfile_path }}
+    - name: Delete existing Compute Engine instance if there is one
+      id: terminate-if-exists
       run: gcloud compute instances delete "${{ inputs.machine_name }}" --zone "${{ inputs.zone }}" --quiet --verbosity none
       continue-on-error: true
       shell: bash
-
-    - id: deploy-vm
+    - name: Deploy Compute Engine instance in GCP
+      id: deploy-vm
       shell: bash
       run: |
         export EMAIL=$(cat $GOOGLE_GHA_CREDS_PATH | jq -r '.["client_email"]')
