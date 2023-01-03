@@ -111,7 +111,7 @@ jobs:
         id: set-matrix
         uses: actions/checkout@v3
       - name: Generate matrix output for flows
-        run: echo "matrix=$(ls sky-pipe/flows/*.py | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        run: echo "matrix=$(ls src/sky-pipe/flows/*.py | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
 
   deploy-flows-images:
     needs: [builds-and-deploys-flows-image, deploy-block, list-flows]
