@@ -25,32 +25,7 @@ on:
         type: string
 
 jobs:
-#  builds-and-deploys-flows-image:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v3
-#      - name: Get Python 3.10
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.10'
-#      - name: Install Poetry
-#        run: pip install poetry
-#      - name: Generate requirements.txt
-#        run: poetry export -f requirements.txt -o requirements.txt
-#      - name: Build and push image to Artifact Registry
-#        id: image
-#        uses: ./.github/actions/container-image
-#        with:
-#          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
-#          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
-#          gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-#          region: ${{ github.event.inputs.region }}
-#          artifact_repository: ${{ github.event.inputs.artifact_repository }}
-#          image_name: ${{ github.event.inputs.image_name }}
-#          dockerfile_path: Dockerfile_Flows
-
-  deploy-block:
+  builds-and-deploys-flows-image:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -63,31 +38,60 @@ jobs:
         run: pip install poetry
       - name: Generate requirements.txt
         run: poetry export -f requirements.txt -o requirements.txt
-      - name: Install requirements.txt
-        run: pip install -r requirements.txt
-      - name: Authenticate with Prefect Cloud
-        id: login-prefect
+      - name: Build and push image to Artifact Registry
+        id: image-build-push
+        uses: ./.github/actions/container-image
+        with:
+          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
+          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
+          gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          region: ${{ github.event.inputs.region }}
+          artifact_repository: ${{ github.event.inputs.artifact_repository }}
+          image_name: ${{ github.event.inputs.image_name }}
+          dockerfile_path: Dockerfile_Flows
+      - name: test-output
         run: |
-          prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
-          prefect config set PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}
-        shell: bash
-      - name: create-block
-        run: |
-          cat <<EOF > blocks.py
-          from prefect_gcp.cloud_run import CloudRunJob
-          from prefect_gcp.credentials import GcpCredentials
-          
-          block = CloudRunJob(
-            image="${{ inputs.image_uri }}",
-            region="${{ inputs.region }}",
-            credentials=GcpCredentials.load("gcp-credentials"),
-            cpu=1,
-            timeout=3600,
-          )
-          block.save("testaroo", overwrite=True)
-          
-          EOF
-          python blocks.py
+          echo "HELLO"
+          echo ${{ steps.image-build-push.outputs.image-uri }}
+
+#  deploy-block:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: Get Python 3.10
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.10'
+#      - name: Install Poetry
+#        run: pip install poetry
+#      - name: Generate requirements.txt
+#        run: poetry export -f requirements.txt -o requirements.txt
+#      - name: Install requirements.txt
+#        run: pip install -r requirements.txt
+#      - name: Authenticate with Prefect Cloud
+#        id: login-prefect
+#        run: |
+#          prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
+#          prefect config set PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}
+#        shell: bash
+#      - name: create-block
+#        run: |
+#          cat <<EOF > blocks.py
+#          from prefect_gcp.cloud_run import CloudRunJob
+#          from prefect_gcp.credentials import GcpCredentials
+#
+#          block = CloudRunJob(
+#            image="${{  }}",
+#            region="${{ inputs.region }}",
+#            credentials=GcpCredentials.load("gcp-credentials"),
+#            cpu=1,
+#            timeout=3600,
+#          )
+#          block.save("testaroo", overwrite=True)
+#
+#          EOF
+#          python blocks.py
 
 #  list-flows:
 #    runs-on: ubuntu-latest

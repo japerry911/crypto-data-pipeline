@@ -24,6 +24,10 @@ inputs:
     description: 'Path and filename of the Dockerfile'
     required: true
     default: Dockerfile
+outputs:
+  image-uri:
+    description: Image URI for the pushed image
+    value: ${{ steps.output-image-uri.outputs.image-uri }}
 
 runs:
   using: "composite"
@@ -56,4 +60,8 @@ runs:
         docker tag "${{ env.RAW_IMAGE }}" "${{ env.IMAGE_URI }}"
         docker push "${{ env.RAW_IMAGE }}"
         docker push "${{ env.IMAGE_URI }}"
+      shell: bash
+
+    - id: output-image-uri
+      run: echo "image-uri=$(echo ${{ env.IMAGE_URI }}" >> $GITHUB_OUTPUT
       shell: bash
