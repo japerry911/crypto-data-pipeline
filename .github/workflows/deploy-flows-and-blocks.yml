@@ -82,7 +82,6 @@ jobs:
             region="${{ inputs.region }}",
             credentials=GcpCredentials.load("gcp-credentials"),
             cpu=1,
-            memory=512,
             timeout=3600,
           )
           block.save("testaroo", overwrite=True)
