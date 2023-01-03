@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "crypto-data-pipeline"
+version = "0.1.0"
+description = ""
+authors = ["Jack Perry <jack.e.perry@outlook.com>"]
+readme = "README.md"
+packages = [{include = "crypto_data_pipeline"}]
+
+[tool.poetry.dependencies]
+python = "~3.10"
+prefect-gcp = "^0.2.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

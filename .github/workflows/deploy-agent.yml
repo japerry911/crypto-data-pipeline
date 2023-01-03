@@ -1,0 +1,46 @@
+name: Prefect Agent Deployment
+on:
+  workflow_dispatch:
+    inputs:
+      artifact_repository:
+        description: Artifact Registry Repository
+        required: true
+        default: 'prefect-agent'
+        type: string
+      region:
+        description: GCP region
+        required: true
+        default: 'us-central1'
+        type: string
+      zone:
+        description: Zone in the selected GCP region
+        required: true
+        default: 'us-central1-f'
+        type: string
+      machine_type:
+        description: GCP Compute Engine instance type
+        required: true
+        default: 'e2-micro'
+        type: string
+      machine_name:
+        description: Unique name for your GCP Compute Engine instance
+        required: true
+        default: 'prefect-agent-cloud-vm'
+        type: string
+
+jobs:
+  deploy-container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - id: deploy-container
+        uses: ./.github/actions/deploy-container
+        with:
+          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
+          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
+          artifact_repository: ${{ github.event.inputs.artifact_repository }}
+          region: ${{ github.event.inputs.region }}
+          gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+          zone: ${{ github.event.inputs.zone }}
+          machine_type: ${{ github.event.inputs.machine_type }} 
+          machine_name: ${{ github.event.inputs.machine_name }} 
