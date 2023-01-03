@@ -12,4 +12,4 @@ ENV PREFECT_API_URL=$PREFECT_API_URL
 
 ENV PYTHONUNBUFFERED True
 
-ENTRYPOINT ["prefect", "agent", "start", "-q", "sky-pipe"]
+ENTRYPOINT ["prefect", "agent", "start", "--work-queue", "sky-pipe"]
