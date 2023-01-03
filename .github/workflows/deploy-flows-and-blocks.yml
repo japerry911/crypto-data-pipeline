@@ -110,19 +110,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Generate matrix output for flows
-        run: echo "matrix=$(ls src/sky-pipe/flows/*.py | jq -R -s -c 'split("\n")[:-1]')" # >> $GITHUB_OUTPUT
+        run: echo "matrix=$(ls src/sky-pipe/flows/*.py | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         shell: bash
 
-#  deploy-flows-images:
+  deploy-flows-images:
 #    needs: [builds-and-deploys-flows-image, deploy-block, list-flows]
-#    needs: [list-flows]
-#    runs-on: ubuntu-latest
-#    strategy:
-#      matrix:
+    needs: [list-flows]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        flows: ${{ needs.list-flows.outputs.matrix }}
 #        flows: ${{ fromJson(needs.list-flows.outputs.matrix) }}
-#    steps:
-#      - name: test
-#        run: echo ${{ matrix.flows }}
+    steps:
+      - name: test
+        run: echo ${{ matrix.flows }}
 #      - name: Checkout code
 #        uses: actions/checkout@v3
 #      - name: Creates entrypoint output value
