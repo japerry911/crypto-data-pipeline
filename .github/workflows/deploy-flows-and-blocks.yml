@@ -28,7 +28,7 @@ jobs:
   builds-and-deploys-flows-image:
     runs-on: ubuntu-latest
     outputs:
-      image-uri: ${{ steps.image-build-push.outputs.image-uri }}
+      image-uri: ${{ steps.output-image-uri.outputs.image-uri }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -51,6 +51,10 @@ jobs:
           artifact_repository: ${{ github.event.inputs.artifact_repository }}
           image_name: ${{ github.event.inputs.image_name }}
           dockerfile_path: Dockerfile_Flows
+      - name: Output image URI
+        id: output-image-uri
+        run: echo "image-uri=$(echo ${{ steps.image-build-push.outputs.image-uri }})" >> $GITHUB_OUTPUT
+        shell: bash
 
   deploy-block:
     needs: [builds-and-deploys-flows-image]
