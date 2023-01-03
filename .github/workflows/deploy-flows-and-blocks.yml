@@ -25,82 +25,82 @@ on:
         type: string
 
 jobs:
-  builds-and-deploys-flows-image:
-    runs-on: ubuntu-latest
-    outputs:
-      image-uri: ${{ steps.output-image-uri.outputs.image-uri }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Get Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Install Poetry
-        run: pip install poetry
-      - name: Generate requirements.txt
-        run: poetry export -f requirements.txt -o requirements.txt
-      - name: Build and push image to Artifact Registry
-        id: image-build-push
-        uses: ./.github/actions/container-image
-        with:
-          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
-          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
-          gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-          region: ${{ github.event.inputs.region }}
-          artifact_repository: ${{ github.event.inputs.artifact_repository }}
-          image_name: ${{ github.event.inputs.image_name }}
-          dockerfile_path: Dockerfile_Flows
-      - name: Output image URI
-        id: output-image-uri
-        run: echo "image-uri=$(echo ${{ steps.image-build-push.outputs.image-uri }})" >> $GITHUB_OUTPUT
-        shell: bash
-
-  deploy-block:
-    needs: [builds-and-deploys-flows-image]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        cpu: [1]
-        memory: [128, 256, 512, 1024, 2048, 4096]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Get Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-      - name: Install Poetry
-        run: pip install poetry
-      - name: Generate requirements.txt
-        run: poetry export -f requirements.txt -o requirements.txt
-      - name: Install requirements.txt
-        run: pip install -r requirements.txt
-      - name: Authenticate with Prefect Cloud
-        id: login-prefect
-        run: |
-          prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
-          prefect config set PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}
-        shell: bash
-      - name: create-block
-        run: |
-          cat <<EOF > blocks.py
-          from prefect_gcp.cloud_run import CloudRunJob
-          from prefect_gcp.credentials import GcpCredentials
-
-          block = CloudRunJob(
-            image="${{ needs.builds-and-deploys-flows-image.outputs.image-uri }}",
-            region="${{ inputs.region }}",
-            credentials=GcpCredentials.load("gcp-credentials"),
-            cpu=${{ matrix.cpu }},
-            memory=${{ matrix.memory }},
-            memory_unit="Mi",
-            timeout=3600,
-          )
-          block.save("flows-${{ matrix.cpu }}-${{ matrix.memory }}", overwrite=True)
-
-          EOF
-          python blocks.py
+#  builds-and-deploys-flows-image:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      image-uri: ${{ steps.output-image-uri.outputs.image-uri }}
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: Get Python 3.10
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.10'
+#      - name: Install Poetry
+#        run: pip install poetry
+#      - name: Generate requirements.txt
+#        run: poetry export -f requirements.txt -o requirements.txt
+#      - name: Build and push image to Artifact Registry
+#        id: image-build-push
+#        uses: ./.github/actions/container-image
+#        with:
+#          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
+#          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
+#          gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+#          region: ${{ github.event.inputs.region }}
+#          artifact_repository: ${{ github.event.inputs.artifact_repository }}
+#          image_name: ${{ github.event.inputs.image_name }}
+#          dockerfile_path: Dockerfile_Flows
+#      - name: Output image URI
+#        id: output-image-uri
+#        run: echo "image-uri=$(echo ${{ steps.image-build-push.outputs.image-uri }})" >> $GITHUB_OUTPUT
+#        shell: bash
+#
+#  deploy-block:
+#    needs: [builds-and-deploys-flows-image]
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        cpu: [1]
+#        memory: [128, 256, 512, 1024, 2048, 4096]
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: Get Python 3.10
+#        uses: actions/setup-python@v4
+#        with:
+#          python-version: '3.10'
+#      - name: Install Poetry
+#        run: pip install poetry
+#      - name: Generate requirements.txt
+#        run: poetry export -f requirements.txt -o requirements.txt
+#      - name: Install requirements.txt
+#        run: pip install -r requirements.txt
+#      - name: Authenticate with Prefect Cloud
+#        id: login-prefect
+#        run: |
+#          prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
+#          prefect config set PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}
+#        shell: bash
+#      - name: create-block
+#        run: |
+#          cat <<EOF > blocks.py
+#          from prefect_gcp.cloud_run import CloudRunJob
+#          from prefect_gcp.credentials import GcpCredentials
+#
+#          block = CloudRunJob(
+#            image="${{ needs.builds-and-deploys-flows-image.outputs.image-uri }}",
+#            region="${{ inputs.region }}",
+#            credentials=GcpCredentials.load("gcp-credentials"),
+#            cpu=${{ matrix.cpu }},
+#            memory=${{ matrix.memory }},
+#            memory_unit="Mi",
+#            timeout=3600,
+#          )
+#          block.save("flows-${{ matrix.cpu }}-${{ matrix.memory }}", overwrite=True)
+#
+#          EOF
+#          python blocks.py
 
   list-flows:
     runs-on: ubuntu-latest
@@ -108,10 +108,10 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - name: Checkout
-        id: set-matrix
         uses: actions/checkout@v3
       - name: Generate matrix output for flows
         run: echo "matrix=$(ls src/sky-pipe/flows/*.py | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        shell: bash
 
   deploy-flows-images:
     needs: [builds-and-deploys-flows-image, deploy-block, list-flows]
@@ -120,20 +120,22 @@ jobs:
       matrix:
         flows: ${{ fromJson(needs.list-flows.outputs.matrix) }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Creates entrypoint output value
-        id: flow
-        run: |
-          export FLOW_NAME=$(basename ${{ matrix.flows }} .py)
-          echo "entrypoint=${{ matrix.flows }}:$FLOW_NAME" >> $GITHUB_OUTPUT
-      - name: Deploy flows to Cloud Run
-        id: deploy
-        uses: ./.github/actions/deploy-flows
-        with:
-          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
-          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
-          flow_entrypoint: ${{ steps.flow.outputs.entrypoint }}
-          deployment: "${{ matrix.flows }}-main-flow"
-          queue: ${{ github.event.inputs.prefect-queue }}
-          infrastructure_block: "flows-1-256"
+      - name: test
+        run: echo ${{ matrix.flows }}
+#      - name: Checkout code
+#        uses: actions/checkout@v3
+#      - name: Creates entrypoint output value
+#        id: flow
+#        run: |
+#          export FLOW_NAME=$(basename ${{ matrix.flows }} .py)
+#          echo "entrypoint=${{ matrix.flows }}:$FLOW_NAME" >> $GITHUB_OUTPUT
+#      - name: Deploy flows to Cloud Run
+#        id: deploy
+#        uses: ./.github/actions/deploy-flows
+#        with:
+#          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
+#          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
+#          flow_entrypoint: ${{ steps.flow.outputs.entrypoint }}
+#          deployment: "${{ matrix.flows }}-main-flow"
+#          queue: ${{ github.event.inputs.prefect-queue }}
+#          infrastructure_block: "flows-1-256"
