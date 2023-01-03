@@ -36,11 +36,6 @@ runs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
 
-    - id: repository
-      run: gcloud artifacts repositories create ${{ inputs.artifact_repository }} --repository-format=docker --location=${{ inputs.region }}
-      continue-on-error: true
-      shell: bash
-
     - id: set-image
       run: |
         echo "RAW_IMAGE=${{ inputs.region }}-docker.pkg.dev/$GCP_PROJECT/${{ inputs.artifact_repository }}/${{ inputs.image_name }}" >> $GITHUB_ENV
