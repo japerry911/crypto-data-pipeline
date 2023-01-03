@@ -147,4 +147,4 @@ jobs:
           flow_entrypoint: ${{ steps.flow.outputs.entrypoint }}
           deployment: "${{ matrix.flows }}-main-flow"
           queue: ${{ github.event.inputs.prefect-queue }}
-          infrastructure_block: "flows-1-256"
+          infrastructure_block: "cloud-run-job/flows-1-256"
