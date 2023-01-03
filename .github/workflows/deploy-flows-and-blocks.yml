@@ -1,4 +1,4 @@
-name: Prefect Deployments for deployments, flows, and blocks
+name: Deploy Prefect Flows-Blocks-Deploys.
 
 on:
   workflow_dispatch:
