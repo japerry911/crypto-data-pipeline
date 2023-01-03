@@ -97,7 +97,7 @@ jobs:
             memory_unit="Mi",
             timeout=3600,
           )
-          block.save("flows-${{ matrix.cpu }}-{{ matrix.memory }}", overwrite=True)
+          block.save("flows-${{ matrix.cpu }}-${{ matrix.memory }}", overwrite=True)
 
           EOF
           python blocks.py
