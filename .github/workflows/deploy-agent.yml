@@ -47,8 +47,8 @@ jobs:
         run: pip install poetry
       - name: Generate requirements.txt
         run: poetry export -f requirements.txt -o requirements.txt
-      - uses: actions/checkout@v3
-      - id: deploy-container
+      - name: Build and deploy actual container
+        id: deploy-container
         uses: ./.github/actions/deploy-container
         with:
           prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
@@ -57,6 +57,6 @@ jobs:
           region: ${{ github.event.inputs.region }}
           gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
           zone: ${{ github.event.inputs.zone }}
-          machine_type: ${{ github.event.inputs.machine_type }} 
+          machine_type: ${{ github.event.inputs.machine_type }}
           machine_name: ${{ github.event.inputs.machine_name }}
           image_name: ${{ github.event.inputs.image_name }}
