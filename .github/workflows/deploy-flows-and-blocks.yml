@@ -68,8 +68,8 @@ jobs:
       - name: Authenticate with Prefect Cloud
         id: login-prefect
         run: |
-          prefect config set PREFECT_API_KEY=${{ inputs.prefect_api_key }}
-          prefect config set PREFECT_API_URL=${{ inputs.prefect_api_url }}
+          prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
+          prefect config set PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}
         shell: bash
       - name: create-block
         run: |
