@@ -1,8 +1,6 @@
 name: Prefect Cloud execution layer on Google Cloud Run
-branding:
-  icon: cloud
-  color: blue
 description: 'Package your dependencies into a Docker image and deploy Prefect Cloud execution layer to Google Compute Engine'
+
 inputs:
   prefect_api_key:
     description: 'Prefect Cloud API key'
@@ -31,6 +29,7 @@ inputs:
   machine_name:
     description: 'GCP Compute Engine instance name'
     required: true
+
 runs:
   using: "composite"
   steps:
