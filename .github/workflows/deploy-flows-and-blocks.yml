@@ -27,6 +27,10 @@ on:
 jobs:
   builds-and-deploys-flows-image:
     runs-on: ubuntu-latest
+    outputs:
+      image-uri:
+        description: Image URI for the pushed image
+        value: ${{ steps.image-build-push.outputs.image-uri }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -49,14 +53,13 @@ jobs:
           artifact_repository: ${{ github.event.inputs.artifact_repository }}
           image_name: ${{ github.event.inputs.image_name }}
           dockerfile_path: Dockerfile_Flows
-      - name: test-output
-        run: |
-          echo "HELLO"
-          echo ${{ steps.image-build-push.outputs.image-uri }}
 
-#  deploy-block:
-#    runs-on: ubuntu-latest
-#    steps:
+  deploy-block:
+    needs: [builds-and-deploys-flows-image]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test output jobs output
+        run: echo ${{ needs.builds-and-deploys-flows-image.outputs.image-uri }}
 #      - name: Checkout code
 #        uses: actions/checkout@v3
 #      - name: Get Python 3.10
