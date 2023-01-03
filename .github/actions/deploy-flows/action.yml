@@ -18,10 +18,6 @@ inputs:
   queue:
     description: 'Prefect queue name'
     required: true
-  storage_block:
-    description: 'Name of the storage block'
-    required: false
-    default: "github/default"
   infrastructure_block:
     description: 'Name of the infrastructure block'
     required: false
@@ -52,5 +48,5 @@ runs:
     - name: Run Prefect Deployment build
       run: |
         prefect deployment build ${{ inputs.flow_entrypoint }} -n ${{ inputs.deployment }} -q ${{ inputs.queue }} \
-        -sb "${{ inputs.storage_block }}" -ib "${{ inputs.infrastructure_block }}" --skip-upload -a -v $GITHUB_SHA
+        -ib "${{ inputs.infrastructure_block }}" --skip-upload -a -v $GITHUB_SHA
       shell: bash
