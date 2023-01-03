@@ -34,11 +34,10 @@ on:
         type: string
 
 jobs:
-  build-container:
+  deploy-container:
+    needs: [build-container]
     runs-on: ubuntu-latest
     steps:
-      - name: Get code
-        uses: actions/checkout@v3
       - name: Get Python 3.10
         uses: actions/setup-python@v4
         with:
@@ -47,20 +46,6 @@ jobs:
         run: pip install poetry
       - name: Generate requirements.txt
         run: poetry export -f requirements.txt -o requirements.txt
-      - name: Build container image
-        id: deploy-container
-        uses: ./.github/actions/container-image
-        with:
-          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
-          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
-          artifact_repository: ${{ github.event.inputs.artifact_repository }}
-          image_name: ${{ github.event.inputs.image_name }}
-          region: ${{ github.event.inputs.region }}
-          gcp_credentials_json: ${{ secrets.GCP_CREDENTIALS }}
-  deploy-container:
-    needs: [build-container]
-    runs-on: ubuntu-latest
-    steps:
       - uses: actions/checkout@v3
       - id: deploy-container
         uses: ./.github/actions/deploy-container
@@ -73,4 +58,4 @@ jobs:
           zone: ${{ github.event.inputs.zone }}
           machine_type: ${{ github.event.inputs.machine_type }} 
           machine_name: ${{ github.event.inputs.machine_name }}
-          image_name: prefect-agent
+          image_name: ${{ github.event.inputs.image_name }}
