@@ -122,15 +122,15 @@ jobs:
       matrix:
         flows: ${{ fromJson(needs.list-flows.outputs.matrix) }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Creates entrypoint output value
+        id: flow
+        run: |
+          export FLOW_NAME=$(basename ${{ matrix.flows }} .py)
+          echo "entrypoint=${{ matrix.flows }}:$FLOW_NAME" >> $GITHUB_OUTPUT
       - name: test
-        run: echo ${{ matrix.flows }}
-#      - name: Checkout code
-#        uses: actions/checkout@v3
-#      - name: Creates entrypoint output value
-#        id: flow
-#        run: |
-#          export FLOW_NAME=$(basename ${{ matrix.flows }} .py)
-#          echo "entrypoint=${{ matrix.flows }}:$FLOW_NAME" >> $GITHUB_OUTPUT
+        run: echo ${{ steps.flow.outputs.entrypoint }}
 #      - name: Deploy flows to Cloud Run
 #        id: deploy
 #        uses: ./.github/actions/deploy-flows
