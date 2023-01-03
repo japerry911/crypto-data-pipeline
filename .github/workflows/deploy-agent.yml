@@ -37,8 +37,18 @@ jobs:
   build-container:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - id: deploy-container
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Get Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Generate requirements.txt
+        run: poetry export -f requirements.txt -o requirements.txt
+      - name: Build container image
+        id: deploy-container
         uses: ./.github/actions/container-image
         with:
           prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
