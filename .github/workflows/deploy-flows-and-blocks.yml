@@ -120,8 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        flows: ${{ needs.list-flows.outputs.matrix }}
-#        flows: ${{ fromJson(needs.list-flows.outputs.matrix) }}
+        flows: ${{ fromJson(needs.list-flows.outputs.matrix) }}
     steps:
       - name: test
         run: echo ${{ matrix.flows }}
