@@ -3,7 +3,6 @@ FROM prefecthq/prefect:2-python3.10
 COPY requirements.txt .
 
 RUN pip install --upgrade pip setuptools --no-cache-dir
-RUN pip install --trusted-host pypi.python.org --no-cache-dir .
 
 ARG PREFECT_API_KEY
 ENV PREFECT_API_KEY=$PREFECT_API_KEY
