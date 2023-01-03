@@ -129,15 +129,13 @@ jobs:
         run: |
           export FLOW_NAME=$(basename ${{ matrix.flows }} .py)
           echo "entrypoint=${{ matrix.flows }}:$FLOW_NAME" >> $GITHUB_OUTPUT
-      - name: test
-        run: echo ${{ steps.flow.outputs.entrypoint }}
-#      - name: Deploy flows to Cloud Run
-#        id: deploy
-#        uses: ./.github/actions/deploy-flows
-#        with:
-#          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
-#          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
-#          flow_entrypoint: ${{ steps.flow.outputs.entrypoint }}
-#          deployment: "${{ matrix.flows }}-main-flow"
-#          queue: ${{ github.event.inputs.prefect-queue }}
-#          infrastructure_block: "flows-1-256"
+      - name: Deploy flows to Cloud Run
+        id: deploy
+        uses: ./.github/actions/deploy-flows
+        with:
+          prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
+          prefect_api_url: ${{ secrets.PREFECT_API_URL }}
+          flow_entrypoint: ${{ steps.flow.outputs.entrypoint }}
+          deployment: "${{ matrix.flows }}-main-flow"
+          queue: ${{ github.event.inputs.prefect-queue }}
+          infrastructure_block: "flows-1-256"
