@@ -34,8 +34,7 @@ on:
         type: string
 
 jobs:
-  deploy-container:
-    needs: [build-container]
+  build-and-deploy-container:
     runs-on: ubuntu-latest
     steps:
       - name: Get Python 3.10
