@@ -28,9 +28,7 @@ jobs:
   builds-and-deploys-flows-image:
     runs-on: ubuntu-latest
     outputs:
-      image-uri:
-        description: Image URI for the pushed image
-        value: ${{ steps.image-build-push.outputs.image-uri }}
+      image-uri: ${{ steps.image-build-push.outputs.image-uri }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
