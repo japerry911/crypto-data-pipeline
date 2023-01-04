@@ -10,4 +10,6 @@ ENV PREFECT_API_URL=$PREFECT_API_URL
 
 ENV PYTHONUNBUFFERED True
 
+RUN prefect block register -m prefect_gcp
+
 ENTRYPOINT ["prefect", "agent", "start", "--work-queue", "sky-pipe"]

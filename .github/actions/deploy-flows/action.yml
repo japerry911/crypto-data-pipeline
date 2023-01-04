@@ -45,10 +45,6 @@ runs:
         prefect config set PREFECT_API_URL=${{ inputs.prefect_api_url }}
       shell: bash
 
-    - name: Register GCP blocks with Prefect
-      run: prefect block register -m prefect_gcp
-      shell: bash
-
     - name: Run Prefect Deployment build
       run: |
         prefect deployment build ${{ inputs.flow_entrypoint }} -n ${{ inputs.deployment }} -q ${{ inputs.queue }} \
