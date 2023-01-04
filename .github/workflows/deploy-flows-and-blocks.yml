@@ -82,9 +82,6 @@ jobs:
           prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
           prefect config set PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}
         shell: bash
-      - name: Register GCP blocks with Prefect
-        run: poetry run prefect block register -m prefect_gcp
-        shell: bash
       - name: create-block
         run: |
           cat <<EOF > blocks.py
@@ -136,6 +133,9 @@ jobs:
         run: poetry export -f requirements.txt -o requirements.txt
       - name: Install requirements.txt
         run: pip install -r requirements.txt
+      - name: Register GCP blocks with Prefect
+        run: prefect block register -m prefect_gcp
+        shell: bash
       - name: Creates entrypoint output value
         id: flow
         run: |
