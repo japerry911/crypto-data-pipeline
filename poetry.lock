@@ -884,6 +884,19 @@ dotenv = ["python-dotenv (>=0.10.4)"]
 email = ["email-validator (>=1.0.3)"]
 
 [[package]]
+name = "pydata-google-auth"
+version = "1.4.0"
+description = "PyData helpers for authenticating to Google APIs"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+google-auth = {version = ">=1.25.0,<3.0dev", markers = "python_version >= \"3.6\""}
+google-auth-oauthlib = {version = ">=0.4.0", markers = "python_version >= \"3.6\""}
+setuptools = "*"
+
+[[package]]
 name = "Pygments"
 version = "2.14.0"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -1257,7 +1270,7 @@ test = ["websockets"]
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "5a110a6fcf518c9d8d960c340331085a60a32bc00e046026ec52aba5c3170e60"
+content-hash = "cc3cdb3d8718197583b4d336b6d4d0d9b7259347c94307c39777b8a02a5cb4fa"
 
 [metadata.files]
 aiosqlite = [
@@ -1944,6 +1957,10 @@ pydantic = [
     {file = "pydantic-1.10.4-cp39-cp39-win_amd64.whl", hash = "sha256:9cbdc268a62d9a98c56e2452d6c41c0263d64a2009aac69246486f01b4f594c4"},
     {file = "pydantic-1.10.4-py3-none-any.whl", hash = "sha256:4948f264678c703f3877d1c8877c4e3b2e12e549c57795107f08cf70c6ec7774"},
     {file = "pydantic-1.10.4.tar.gz", hash = "sha256:b9a3859f24eb4e097502a3be1fb4b2abb79b6103dd9e2e0edb70613a4459a648"},
+]
+pydata-google-auth = [
+    {file = "pydata-google-auth-1.4.0.tar.gz", hash = "sha256:fe7d97f3392f5f4e4026bb3d6b2f77e5988c7b706c022235f34547214c8d8dba"},
+    {file = "pydata_google_auth-1.4.0-py2.py3-none-any.whl", hash = "sha256:c0a1e7407adac70d1dbf4f95cc427934556c7c0c41c795ca6f9b969dbb082b2e"},
 ]
 Pygments = [
     {file = "Pygments-2.14.0-py3-none-any.whl", hash = "sha256:fa7bd7bd2771287c0de303af8bfdfc731f51bd2c6a47ab69d117138893b82717"},
