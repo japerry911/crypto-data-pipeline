@@ -146,6 +146,6 @@ jobs:
           prefect_api_key: ${{ secrets.PREFECT_API_KEY }}
           prefect_api_url: ${{ secrets.PREFECT_API_URL }}
           flow_entrypoint: ${{ steps.flow.outputs.entrypoint }}
-          deployment: "${{ matrix.flows }}-main-flow"
+          deployment: testaroo
           queue: ${{ github.event.inputs.prefect-queue }}
           infrastructure_block: "cloud-run-job/flows-1-256"
