@@ -801,7 +801,7 @@ dev = ["autoflake8", "cairosvg", "flake8", "flaky", "ipython", "jinja2", "mkdocs
 
 [[package]]
 name = "prefect-gcp"
-version = "0.2.2"
+version = "0.1.8"
 description = "Prefect tasks and subflows for interacting with Google Cloud Platform."
 category = "main"
 optional = false
@@ -809,7 +809,7 @@ python-versions = ">=3.7"
 
 [package.dependencies]
 google-api-python-client = ">=2.20.0"
-prefect = ">=2.7.2"
+prefect = ">=2.0.0"
 
 [package.extras]
 aiplatform = ["google-cloud-aiplatform"]
@@ -1270,7 +1270,7 @@ test = ["websockets"]
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "cc3cdb3d8718197583b4d336b6d4d0d9b7259347c94307c39777b8a02a5cb4fa"
+content-hash = "1ae906df10437e0de08acb1b73050245316f6fd7edbab360936e6b7cfc96e7b6"
 
 [metadata.files]
 aiosqlite = [
@@ -1885,8 +1885,8 @@ prefect = [
     {file = "prefect-2.7.5.tar.gz", hash = "sha256:558eee943eac3f1af32d36fd6db7f4a14e1b13b516f1f5fa4cba6cbb366e4c8c"},
 ]
 prefect-gcp = [
-    {file = "prefect-gcp-0.2.2.tar.gz", hash = "sha256:26c0bcc5efb000e8bdc0294dacbebc629edfd87ecd81fe85f2cf9b6c81f808c0"},
-    {file = "prefect_gcp-0.2.2-py3-none-any.whl", hash = "sha256:678caac5edc4a1e33422373048d7764521b6fa4de2ce9f7f7122afcbd0c0ba33"},
+    {file = "prefect-gcp-0.1.8.tar.gz", hash = "sha256:8d7bb4d6bc3fbbef44c32537e8d9b7d0f62d1272d9107f9d14f562b20fb87af3"},
+    {file = "prefect_gcp-0.1.8-py3-none-any.whl", hash = "sha256:79886d8ed5ac5011c7c643e36c0f80f4d11c81c9aeb028a5a93acf2d476ccfca"},
 ]
 proto-plus = [
     {file = "proto-plus-1.22.1.tar.gz", hash = "sha256:6c7dfd122dfef8019ff654746be4f5b1d9c80bba787fe9611b508dd88be3a2fa"},
