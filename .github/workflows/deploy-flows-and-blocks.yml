@@ -82,6 +82,9 @@ jobs:
           prefect config set PREFECT_API_KEY=${{ secrets.PREFECT_API_KEY }}
           prefect config set PREFECT_API_URL=${{ secrets.PREFECT_API_URL }}
         shell: bash
+      - name: Register GCP blocks with Prefect
+        run: poetry run prefect block register -m prefect_gcp
+        shell: bash
       - name: create-block
         run: |
           cat <<EOF > blocks.py
