@@ -1,6 +1,6 @@
 FROM prefecthq/prefect:2-python3.10
 
-RUN pip install --upgrade pip setuptools --no-cache-dir
+RUN pip install --upgrade pip setuptools poetry --no-cache-dir
 
 ARG PREFECT_API_KEY
 ENV PREFECT_API_KEY=$PREFECT_API_KEY
