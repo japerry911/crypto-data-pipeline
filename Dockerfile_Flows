@@ -12,4 +12,4 @@ ENV PYTHONUNBUFFERED True
 
 WORKDIR opt/
 
-COPY src/sky-pipe ./opt
+COPY src/sky-pipe/flows opt/prefect
