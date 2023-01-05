@@ -48,5 +48,5 @@ runs:
     - name: Run Prefect Deployment build
       run: |
         prefect deployment build ${{ inputs.flow_entrypoint }} -n ${{ inputs.deployment }} -q ${{ inputs.queue }} \
-        -ib "${{ inputs.infrastructure_block }}" --skip-upload -a -v $GITHUB_SHA
+        -ib "${{ inputs.infrastructure_block }}" --skip-upload --path sky-pipe/flows -a -v $GITHUB_SHA
       shell: bash
