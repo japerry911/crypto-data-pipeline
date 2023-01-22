@@ -112,7 +112,7 @@ jobs:
       - name: Generate matrix output for flows
         id: set-matrix
         run: |
-          echo "matrix=$(ls src/sky-pipe/flows/*.py | sed "s/src\///g" | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+          echo "matrix=$(ls src/sky_pipe/flows/*.py | sed "s/src\///g" | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         shell: bash
 
   deploy-flows-images:
