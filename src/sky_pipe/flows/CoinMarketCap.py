@@ -13,7 +13,7 @@ from sky_pipe.core.integrations.dbt.main import run_dbt_job
 
 
 @flow(name="CoinMarketCap Main Flow")
-def main():
+def CoinMarketCap():
     logger = get_run_logger()
 
     DBT_JOB_ID = 200816
