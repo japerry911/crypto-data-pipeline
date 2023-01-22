@@ -8,13 +8,16 @@ packages = [{include = "crypto_data_pipeline"}]
 
 [tool.poetry.dependencies]
 python = "~3.10"
-prefect-gcp = "0.1.8"
+prefect-gcp = {extras = ["secret_manager"], version = "^0.2.4"}
 google-cloud-storage = "^2.7.0"
 google-cloud-bigquery = "^3.4.1"
 google-auth-oauthlib = "^0.8.0"
 google-auth = "^2.15.0"
 pydata-google-auth = "^1.4.0"
 prefect = "^2.7.5"
+pandas = "^1.5.3"
+pyarrow = "^10.0.1"
+fastparquet = "^2023.1.0"
 
 
 [build-system]
