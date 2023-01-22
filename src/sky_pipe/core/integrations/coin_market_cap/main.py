@@ -1,6 +1,7 @@
-import requests
+from datetime import datetime
 from time import sleep
 
+import requests
 from prefect import flow, get_run_logger, task
 from prefect_gcp.secret_manager import GcpSecret
 
@@ -17,7 +18,7 @@ def fetch_coin_market_cap_data():
     logger.info("Fetch all Crypto IDs, Names, and USD Prices")
     raw_data = fetch_all_crypto_price_data(api_key=api_key)
 
-    logger.info(f"Fetched a total of {len(raw_data)} rows of data")
+    logger.info(f"---Fetched a total of {len(raw_data)} rows of data---")
 
     return raw_data
 
@@ -30,6 +31,7 @@ def fetch_all_crypto_price_data(api_key: str) -> list[dict[str, str]]:
     API_BASE_URL = "https://sandbox-api.coinmarketcap.com"
     API_VERSION = "v1"
     LIMIT = 5_000
+    DATE_FETCHED = datetime.now().date().strftime("%Y-%m-%d")
 
     use_url = f"{API_BASE_URL}/{API_VERSION}/cryptocurrency/listings/latest"
     headers = {
@@ -57,7 +59,10 @@ def fetch_all_crypto_price_data(api_key: str) -> list[dict[str, str]]:
         returned_length = len(data_list)
 
         return_data_list.extend(
-            parse_cryptocurrency_listings_response(data_list=data_list)
+            parse_cryptocurrency_listings_response(
+                data_list=data_list,
+                date_fetched=DATE_FETCHED,
+            )
         )
 
         # Reduce chances of Rate Limit / max 30 requests per minute
@@ -73,7 +78,10 @@ def fetch_coin_market_cap_api_key() -> str:
     return GcpSecret.load("sandbox-coinmarketcap-api-key").read_secret()
 
 
-def parse_cryptocurrency_listings_response(data_list: list[dict]) -> list[dict]:
+def parse_cryptocurrency_listings_response(
+    data_list: list[dict],
+    date_fetched: str,
+) -> list[dict]:
     return_list = []
 
     for row in data_list:
@@ -83,6 +91,7 @@ def parse_cryptocurrency_listings_response(data_list: list[dict]) -> list[dict]:
                 "name": row["name"],
                 "cmc_rank": str(row["cmc_rank"]),
                 "usd_price": str(row["quote"]["USD"]["price"]),
+                "date_fetched": date_fetched,
             }
         )
 
