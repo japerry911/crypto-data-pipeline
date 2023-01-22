@@ -1,0 +1,28 @@
+version: 2 
+ 
+models:
+    - name: dim__coin_market_cap_exchange_history
+      description: Cryptocurrency exchange rates history provided by CoinMarketCap.com
+
+      tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - Id
+            - Date
+
+      columns:
+      - name: Date
+        tests:
+          - not_null
+      - name: Id
+        test:
+          - not_null
+      - name: Currency_Name
+        tests:
+          - not_null
+      - name: Coin_Market_Cap_Rank
+        tests:
+          - not_null
+      - name: USD_Exchange_Price
+        tests:
+          - not_null

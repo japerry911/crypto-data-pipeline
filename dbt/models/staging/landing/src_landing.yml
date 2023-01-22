@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: landing
+    description: The Landing dataset in BigQuery"
+    dataset: landing
+    tables:
+      - name: coin_market_cap
