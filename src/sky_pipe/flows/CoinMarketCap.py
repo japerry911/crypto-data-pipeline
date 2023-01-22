@@ -6,6 +6,9 @@ from sky_pipe.core.integrations.coin_market_cap.main import fetch_coin_market_ca
 from sky_pipe.core.integrations.google_cloud_storage.main import (
     load_to_parquet_and_upload_to_gcs,
 )
+from sky_pipe.core.integrations.google_bigquery.main import (
+    load_files_from_gcs_to_bigquery,
+)
 
 
 @flow(name="CoinMarketCap Main Flow")
@@ -19,7 +22,10 @@ def main():
     raw_data = fetch_coin_market_cap_data()
 
     logger.info("Loading data into Parquet and then uploading to Google Cloud Storage")
-    load_to_parquet_and_upload_to_gcs(data=raw_data)
+    gcs_filename = load_to_parquet_and_upload_to_gcs(data=raw_data)
+
+    logger.info("Loading file(s) from GCS to BQ Warehouse")
+    load_files_from_gcs_to_bigquery(gcs_filenames=[gcs_filename])
 
     end_time = perf_counter()
     total_time = end_time - start_time

@@ -8,7 +8,7 @@ from prefect_gcp.cloud_storage import GcsBucket
 
 
 @flow(name="Load-to-Parquet-and-Upload-to-GCS")
-def load_to_parquet_and_upload_to_gcs(data: list[dict]):
+def load_to_parquet_and_upload_to_gcs(data: list[dict]) -> str:
     logger = get_run_logger()
 
     logger.info("---Starting Load to Parquet and Upload to GCS---")
@@ -17,17 +17,21 @@ def load_to_parquet_and_upload_to_gcs(data: list[dict]):
     df = convert_data_to_pandas_dataframe(data=data)
 
     logger.info("Loading DF to Parquet and Uploading to GCS")
-    load_df_to_parquet_and_upload_to_gcs(df=df)
+    gcs_filename = load_df_to_parquet_and_upload_to_gcs(df=df)
+
+    logger.info("---Finished Loading Data to Parquet File in GCS---")
+
+    return gcs_filename
 
 
 @task(name="Load-DF-to-Parquet-and-Upload-to-GCS")
 def load_df_to_parquet_and_upload_to_gcs(df: pd.DataFrame):
     gcs_bucket_block = GcsBucket.load("gcs-bucket-sky-pipe-load-data")
 
-    DATE_UPLOADED = datetime.now().date().strftime("%Y-%m-%d")
+    DATETIME_UPLOADED = datetime.now().strftime("%Y-%d-%m_%H:%M:%S")
 
     destination_gcs_path = (
-        f"coin-market-cap/{DATE_UPLOADED}/{datetime.now().isoformat()}"
+        f"coin-market-cap/{DATETIME_UPLOADED}/{datetime.now().isoformat()}"
         f"-{uuid.uuid4()}"
     )
     local_temp_file = tempfile.NamedTemporaryFile(
@@ -42,6 +46,8 @@ def load_df_to_parquet_and_upload_to_gcs(df: pd.DataFrame):
         from_path=local_temp_file.name,
         to_path=destination_gcs_path,
     )
+
+    return destination_gcs_path
 
 
 @task(name="Convert-Data-to-Pandas-DataFrame")
