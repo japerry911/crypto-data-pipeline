@@ -31,7 +31,7 @@ def fetch_all_crypto_price_data(api_key: str) -> list[dict[str, str]]:
     API_BASE_URL = "https://sandbox-api.coinmarketcap.com"
     API_VERSION = "v1"
     LIMIT = 5_000
-    DATETIME_FETCHED = datetime.now().strftime("%Y-%d-%m %H:%M:%S")
+    DATETIME_FETCHED = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     use_url = f"{API_BASE_URL}/{API_VERSION}/cryptocurrency/listings/latest"
     headers = {
@@ -87,7 +87,7 @@ def parse_cryptocurrency_listings_response(
     for row in data_list:
         return_list.append(
             {
-                "id": row["id"],
+                "id": str(row["id"]),
                 "name": row["name"],
                 "cmc_rank": str(row["cmc_rank"]),
                 "usd_price": str(row["quote"]["USD"]["price"]),

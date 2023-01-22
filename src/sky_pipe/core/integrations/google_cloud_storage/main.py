@@ -28,7 +28,7 @@ def load_to_parquet_and_upload_to_gcs(data: list[dict]) -> str:
 def load_df_to_parquet_and_upload_to_gcs(df: pd.DataFrame):
     gcs_bucket_block = GcsBucket.load("gcs-bucket-sky-pipe-load-data")
 
-    DATETIME_UPLOADED = datetime.now().strftime("%Y-%d-%m_%H:%M:%S")
+    DATETIME_UPLOADED = datetime.now().strftime("%Y-%m-%d")
 
     destination_gcs_path = (
         f"coin-market-cap/{DATETIME_UPLOADED}/{datetime.now().isoformat()}"
