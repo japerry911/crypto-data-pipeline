@@ -1,0 +1,29 @@
+version: 2 
+ 
+models:
+    - name: stg_landing__coin_market_cap
+      description: Cryptocurrency exchange rates provided by CoinMarketCap.com
+
+      tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - id
+            - datetime_fetched
+
+      columns:
+      - name: id
+        test:
+          - not_null
+      - name: name
+        tests:
+          - not_null
+      - name: cmc_rank
+        tests:
+          - not_null
+      - name: usd_price
+        tests:
+          - not_null
+      - name: datetime_fetched
+        tests:
+          - not_null
+        
