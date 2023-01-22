@@ -9,11 +9,14 @@ from sky_pipe.core.integrations.google_cloud_storage.main import (
 from sky_pipe.core.integrations.google_bigquery.main import (
     load_files_from_gcs_to_bigquery,
 )
+from sky_pipe.core.integrations.dbt.main import run_dbt_job
 
 
 @flow(name="CoinMarketCap Main Flow")
 def main():
     logger = get_run_logger()
+
+    DBT_JOB_ID = 200816
 
     logger.info("---Starting CoinMarketCap Main Flow---")
     start_time = perf_counter()
@@ -26,6 +29,9 @@ def main():
 
     logger.info("Loading file(s) from GCS to BQ Warehouse")
     load_files_from_gcs_to_bigquery(gcs_filenames=[gcs_filename])
+
+    logger.info("Running dbt Transformation Queries")
+    run_dbt_job(job_id=DBT_JOB_ID)
 
     end_time = perf_counter()
     total_time = end_time - start_time
