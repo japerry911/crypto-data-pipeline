@@ -18,6 +18,7 @@ prefect = "^2.7.5"
 pandas = "^1.5.3"
 pyarrow = "^10.0.1"
 fastparquet = "^2023.1.0"
+prefect-dbt = "^0.2.7"
 
 
 [build-system]

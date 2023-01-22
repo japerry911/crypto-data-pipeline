@@ -509,6 +509,14 @@ protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.1 || >4.21.1,<4
 grpc = ["grpcio (>=1.44.0,<2.0.0dev)"]
 
 [[package]]
+name = "graphql-core"
+version = "3.2.3"
+description = "GraphQL implementation for Python, a port of GraphQL.js, the JavaScript reference implementation for GraphQL."
+category = "main"
+optional = false
+python-versions = ">=3.6,<4"
+
+[[package]]
 name = "greenlet"
 version = "2.0.1"
 description = "Lightweight in-process concurrent programming"
@@ -924,6 +932,27 @@ uvicorn = ">=0.14.0"
 dev = ["autoflake8", "cairosvg", "flake8", "flaky", "ipython", "jinja2", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings-python", "mock", "moto", "mypy", "numpy", "pillow", "pre-commit", "pytest (>7)", "pytest-asyncio (>=0.18.2)", "pytest-benchmark", "pytest-cov", "pytest-env", "pytest-timeout", "pytest-xdist", "pytkdocs (>=0.14.2)", "pyyaml", "requests", "respx", "setuptools (!=60.9.0)", "virtualenv", "watchfiles"]
 
 [[package]]
+name = "prefect-dbt"
+version = "0.2.7"
+description = "Prefect integration for working with dbt"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+prefect = ">=2.7.2"
+prefect-shell = ">=0.1.0"
+sgqlc = ">=16.0.0"
+
+[package.extras]
+all_extras = ["dbt-core (>=1.1.1)", "prefect-gcp (>=0.1.8)", "prefect-snowflake (>=0.2.0)", "prefect-sqlalchemy (>=0.2.1)"]
+bigquery = ["prefect-gcp (>=0.1.8)"]
+cli = ["dbt-core (>=1.1.1)"]
+dev = ["black", "coverage", "dbt-core (>=1.1.1)", "flake8", "interrogate", "isort", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mock", "mypy", "pillow", "pre-commit", "prefect-gcp (>=0.1.8)", "prefect-snowflake (>=0.2.0)", "prefect-sqlalchemy (>=0.2.1)", "pytest", "pytest-asyncio", "respx"]
+postgres = ["prefect-sqlalchemy (>=0.2.1)"]
+snowflake = ["prefect-snowflake (>=0.2.0)"]
+
+[[package]]
 name = "prefect-gcp"
 version = "0.2.4"
 description = "Prefect tasks and subflows for interacting with Google Cloud Platform."
@@ -943,6 +972,20 @@ bigquery = ["google-cloud-bigquery"]
 cloud_storage = ["google-cloud-storage"]
 dev = ["black", "coverage", "flake8", "google-cloud-aiplatform", "google-cloud-bigquery", "google-cloud-secret-manager", "google-cloud-storage", "interrogate", "isort", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings-python-legacy", "mock", "mypy", "pillow", "pre-commit", "pytest", "pytest-asyncio"]
 secret_manager = ["google-cloud-secret-manager"]
+
+[[package]]
+name = "prefect-shell"
+version = "0.1.3"
+description = "Prefect tasks and subflows for interacting with shell commands."
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+prefect = ">=2.0.0"
+
+[package.extras]
+dev = ["black", "coverage", "flake8", "interrogate", "isort", "mkdocs", "mkdocs-gen-files", "mkdocs-material", "mkdocstrings[python]", "mock", "mypy", "pillow", "pre-commit", "pytest", "pytest-asyncio"]
 
 [[package]]
 name = "proto-plus"
@@ -1236,6 +1279,22 @@ testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8 (<5)", "flake8-202
 testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
 
 [[package]]
+name = "sgqlc"
+version = "16.1"
+description = "Simple GraphQL Client"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+graphql-core = "*"
+
+[package.extras]
+requests = ["requests"]
+sphinx = ["sphinx", "sphinx-argparse"]
+websocket = ["websocket-client"]
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1414,7 +1473,7 @@ test = ["websockets"]
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.10"
-content-hash = "b175653584f022549b2f62803e2dc98572cdee35105b98cdab5504de17867d2a"
+content-hash = "c4fab1889d4d3bc3d948ae8363ad61e9531b82dab9763a8c857f423cefe1b172"
 
 [metadata.files]
 aiosqlite = [
@@ -1913,6 +1972,10 @@ googleapis-common-protos = [
     {file = "googleapis-common-protos-1.58.0.tar.gz", hash = "sha256:c727251ec025947d545184ba17e3578840fc3a24a0516a020479edab660457df"},
     {file = "googleapis_common_protos-1.58.0-py2.py3-none-any.whl", hash = "sha256:ca3befcd4580dab6ad49356b46bf165bb68ff4b32389f028f1abd7c10ab9519a"},
 ]
+graphql-core = [
+    {file = "graphql-core-3.2.3.tar.gz", hash = "sha256:06d2aad0ac723e35b1cb47885d3e5c45e956a53bc1b209a9fc5369007fe46676"},
+    {file = "graphql_core-3.2.3-py3-none-any.whl", hash = "sha256:5766780452bd5ec8ba133f8bf287dc92713e3868ddd83aee4faab9fc3e303dc3"},
+]
 greenlet = [
     {file = "greenlet-2.0.1-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:9ed358312e63bf683b9ef22c8e442ef6c5c02973f0c2a939ec1d7b50c974015c"},
     {file = "greenlet-2.0.1-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:4f09b0010e55bec3239278f642a8a506b91034f03a4fb28289a7d448a67f1515"},
@@ -2298,9 +2361,17 @@ prefect = [
     {file = "prefect-2.7.9-py3-none-any.whl", hash = "sha256:224cc088de40f5c1af7db2d577e00968821bebae6ba83c3e3ef03d0bf4b5c113"},
     {file = "prefect-2.7.9.tar.gz", hash = "sha256:c76b22dbb3cb76f19b9bab00eaa2a039e1792cf7e06e43bacc2ced2604cd78f3"},
 ]
+prefect-dbt = [
+    {file = "prefect-dbt-0.2.7.tar.gz", hash = "sha256:64eb9cb809837f800876bbaa79fc8cd7eb2fae1178e5088cd59486a70078997f"},
+    {file = "prefect_dbt-0.2.7-py3-none-any.whl", hash = "sha256:204080ec9744d3e1384adfb7dc3a0b3918e110490cdbc9e1fa97b57278115e33"},
+]
 prefect-gcp = [
     {file = "prefect-gcp-0.2.4.tar.gz", hash = "sha256:1d5989c17d58e88f45793404694c27810d2b7806d46593c894504e9765c41999"},
     {file = "prefect_gcp-0.2.4-py3-none-any.whl", hash = "sha256:7b28174a3a750e5d777b32f85ed74a3bd24d529566de9ff69d4d92432e46049d"},
+]
+prefect-shell = [
+    {file = "prefect-shell-0.1.3.tar.gz", hash = "sha256:fcfccbbb254a2102d9e4a4483b6e26132d7247b866fb32504292746243c6a831"},
+    {file = "prefect_shell-0.1.3-py3-none-any.whl", hash = "sha256:69880f5f670dc2e372655533ab632757f5c17f26254799b9b3b06d5aae457e91"},
 ]
 proto-plus = [
     {file = "proto-plus-1.22.2.tar.gz", hash = "sha256:0e8cda3d5a634d9895b75c573c9352c16486cb75deb0e078b5fda34db4243165"},
@@ -2635,6 +2706,11 @@ rsa = [
 setuptools = [
     {file = "setuptools-66.1.1-py3-none-any.whl", hash = "sha256:6f590d76b713d5de4e49fe4fbca24474469f53c83632d5d0fd056f7ff7e8112b"},
     {file = "setuptools-66.1.1.tar.gz", hash = "sha256:ac4008d396bc9cd983ea483cb7139c0240a07bbc74ffb6232fceffedc6cf03a8"},
+]
+sgqlc = [
+    {file = "sgqlc-16.1-py3-none-any.whl", hash = "sha256:d472f25101e40b05dab30193e3fc4ecc36bd671f7a9b04a49954a98d121f0fdb"},
+    {file = "sgqlc-16.1-py3.10.egg", hash = "sha256:408167de096f9bdbecb4264f5eefa58fe7d4624e8913e1b302534a763d16bbc6"},
+    {file = "sgqlc-16.1.tar.gz", hash = "sha256:21591009345b116b43a7a7d3995edc25dc2d14092273028205b86d07843a19ac"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
