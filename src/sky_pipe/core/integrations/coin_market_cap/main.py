@@ -32,6 +32,8 @@ def fetch_all_crypto_price_data(api_key: str) -> list[dict[str, str]]:
     LIMIT = 5_000
     DATETIME_FETCHED = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+    start = 1
+
     use_url = f"{API_BASE_URL}/{API_VERSION}/cryptocurrency/listings/latest"
     headers = {
         "Accept": "application/json",
@@ -39,23 +41,30 @@ def fetch_all_crypto_price_data(api_key: str) -> list[dict[str, str]]:
         "X-CMC_PRO_API_KEY": api_key,
     }
     base_params = {
-        "start": 1,
+        "start": start,
         "limit": LIMIT,
     }
 
     page_number = 1
-    returned_length = None
+    returned_length = 1
     return_data_list = []
 
-    while returned_length is None or returned_length == LIMIT:
+    while returned_length == LIMIT or page_number == 1:
+        params = {
+            **base_params,
+            "start": start,
+        }
+
         logger.info(f"Request Page {page_number}")
-        response = requests.get(use_url, headers=headers, params=base_params)
+        response = requests.get(use_url, headers=headers, params=params)
         logger.info("Request Successful")
 
         response_json = response.json()
         data_list = response_json["data"]
 
         returned_length = len(data_list)
+        start += LIMIT
+        page_number += 1
 
         return_data_list.extend(
             parse_cryptocurrency_listings_response(
