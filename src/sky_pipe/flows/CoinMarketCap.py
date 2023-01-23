@@ -2,15 +2,17 @@ from time import perf_counter
 
 from prefect import flow, get_run_logger
 
-from sky_pipe.core.integrations.coin_market_cap.main import \
-    fetch_coin_market_cap_data
+from sky_pipe.core.integrations.coin_market_cap.main import fetch_coin_market_cap_data
 from sky_pipe.core.integrations.dbt.main import run_dbt_job
-from sky_pipe.core.integrations.google_bigquery.main import \
-    load_files_from_gcs_to_bigquery
-from sky_pipe.core.integrations.google_cloud_storage.main import \
-    load_to_parquet_and_upload_to_gcs
+from sky_pipe.core.integrations.google_bigquery.main import (
+    load_files_from_gcs_to_bigquery,
+)
+from sky_pipe.core.integrations.google_cloud_storage.main import (
+    load_to_parquet_and_upload_to_gcs,
+)
 
 
+# noinspection PyPep8Naming
 @flow(name="CoinMarketCap Main Flow")
 def CoinMarketCap():
     logger = get_run_logger()

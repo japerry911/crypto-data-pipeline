@@ -27,8 +27,7 @@ def fetch_coin_market_cap_data():
 def fetch_all_crypto_price_data(api_key: str) -> list[dict[str, str]]:
     logger = get_run_logger()
 
-    # ToDo: make dynamic for dev/prod environment executions
-    API_BASE_URL = "https://sandbox-api.coinmarketcap.com"
+    API_BASE_URL = "https://pro-api.coinmarketcap.com"
     API_VERSION = "v1"
     LIMIT = 5_000
     DATETIME_FETCHED = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -74,8 +73,7 @@ def fetch_all_crypto_price_data(api_key: str) -> list[dict[str, str]]:
 @task(name="Fetch-Coin-Market-Cap-API-Key")
 def fetch_coin_market_cap_api_key() -> str:
     # noinspection PyUnresolvedReferences
-    # ToDo: make dynamic for dev/prod environment executions
-    return GcpSecret.load("sandbox-coinmarketcap-api-key").read_secret()
+    return GcpSecret.load("coinmarketcap-api-key").read_secret()
 
 
 def parse_cryptocurrency_listings_response(
