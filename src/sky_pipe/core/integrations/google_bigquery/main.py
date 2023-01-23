@@ -1,7 +1,8 @@
+from google.cloud.bigquery import (CreateDisposition, SourceFormat,
+                                   WriteDisposition)
 from prefect import flow, get_run_logger
-from google.cloud.bigquery import CreateDisposition, WriteDisposition, SourceFormat
-from prefect_gcp.credentials import GcpCredentials
 from prefect_gcp.bigquery import bigquery_load_cloud_storage
+from prefect_gcp.credentials import GcpCredentials
 
 
 @flow(name="Load-Files-from-GCS-to-BigQuery")

@@ -2,7 +2,8 @@ import json
 
 from prefect import flow, get_run_logger, task
 from prefect_dbt.cloud import DbtCloudCredentials
-from prefect_dbt.cloud.jobs import trigger_dbt_cloud_job_run_and_wait_for_completion
+from prefect_dbt.cloud.jobs import \
+    trigger_dbt_cloud_job_run_and_wait_for_completion
 from prefect_gcp.secret_manager import GcpSecret
 
 
