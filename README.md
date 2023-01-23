@@ -28,6 +28,7 @@ also utilizes `GitHub Actions` for dev ops.
     - GCP BigQuery
 <br/>
 <br/>
+
 ### Prefect Flow Steps
 
 1. Fetch data from CoinMarketCap.com
@@ -38,6 +39,7 @@ also utilizes `GitHub Actions` for dev ops.
 6. Trigger dbt job to run transformations within BigQuery
 <br/>
 <br/>
+
 ### GitHub Actions
 
 - Workflows
